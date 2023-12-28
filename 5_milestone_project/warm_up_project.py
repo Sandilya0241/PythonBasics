@@ -7,11 +7,6 @@ game_board = {"1":" ","2":" ","3":" ","4":" ","5":" ","6":" ","7":" ","8":" ","9
 player_sign = {"PlayerX":"X","PlayerO":"O"}
 
 
-# def toss_coin():
-#     list_toss = ["Heads","Tails"]
-#     return list_toss[randint(0,1)]
-
-
 def display_board(clear_board=False):
 
     ##
@@ -73,6 +68,23 @@ def validate_user_pos_input(pos):
     ##
 
     return game_board[pos] == "X" or game_board[pos] == "O" 
+
+
+def player_selection():
+    
+    ##
+    #
+    # This method will randomly select between PlayerX or PlayerO using randInt(). This is like a toss.
+    #
+    ##
+
+    players = ["PlayerX","PlayerO"]
+    print("Tossing the coin\n")
+    print("..........")
+    sleep(3)
+    toss_won = players[randint(0,len(players)-1)]
+    print(f"\n{toss_won} will play first\n")
+    return toss_won
 
 
 def player_selection():
