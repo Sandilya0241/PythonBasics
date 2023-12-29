@@ -1,0 +1,34 @@
+PyPi is a repository for open-source third-party Python packages.  
+We can use `pip install` for installing packages.
+   
+   To create own modules.
+   ------------------------------
+   
+There is a script file __init__.py makes Python treat entire scripts within that folder to consider as a package
+All that module is it's just the .py script being called from another py script. 
+
+We don't need to write anything inside __init__.py to make Python understand that the folder is not a normal folder instead it's a package folder. But it's just need to be present.
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+__name__
+
+When we call a python script at your command line. When we type `python name_of_my_script.py` in command line, all of the code that is at indentation level 0 is going to get run. That would mean your functions that are defined at indentation level 0, your classes are all going to be defined. Unlike other languages in python there is no main() function that you can call. Instead what happens, implicitly all the code at indentation level 0 gets run when you call the script file.
+
+In Python, there is a built-in variable called `__name__`.
+
+This variable gets assigned a string depending on how you are going to run the script. If we run the script file directly, what python does is, it assigns the built-in variable __name__ with value __main__. This happens in the background.
+
+Ex:
+   __name__ = "__main__"
+
+If below condition is satisfied, we can understand that the file is being executed using command line directly:
+
+   if __name__ == "__main__":
+      some_functions()
+
+If some_functions() code gets, executed which means we can understand that the script file is being executed directly from command prompt.
+
