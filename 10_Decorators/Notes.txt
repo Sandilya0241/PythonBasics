@@ -1,0 +1,242 @@
+REFER Func_Assignment.py
+====================================================================================
+====================================================================================
+====================================================================================
+
+You want to add some extra functionality to existing code.
+
+Two ways of doing it:
+1. Add the extra code (functionality) to your old function. => Old functionality might not work.
+2. Create a brand new function that contains the old code, and then add new code to that. => With this approach you will have new method name
+
+
+What if you want to remove that extra "functionality"? Is there a better way, may be like a switch to quickly add this functionality? 
+
+Python has decorators that allow you to tack on extra fuctionality to an already existing function.
+They use the @ operator and are then placed on top of the original functionality
+
+    Syntax:
+        @some_decorator
+        def my_func():
+            ## do somthing
+            return something
+
+
+Let us understand this by creating a simple function
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+def func():
+    return 1
+#############################################################################################################################
+
+To execute above function func we need to call func()
+
+Instead of func(), if we call func, this returns a message saying this is function object at some address location
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+def hello():
+    return "Hello"
+
+greet = hello
+#############################################################################################################################
+
+
+Let us see what greet() will return after assigning a function
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+greet()
+
+del hello
+#############################################################################################################################
+
+After deleting hello `del hello`, what if we print hello()
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+hello()
+
+#############################################################################################################################
+
+
+Now what if we print greet().
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+greet()
+
+#############################################################################################################################
+
+So greet is pointing to original function object even after deleting hello(). So, we can understand functions are objects that can be passed into other objects. 
+
+Now let us see passing in a function within another function or calling functions within another function.
+
+To understand this REFER Func_Inside_Func.py
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+def hello(name='Sandy'):
+    print("This hello() function has been executed.")
+
+    def greet():
+        return "\t This is greet() function inside hello function."
+
+    def welcome():
+        return "\t This is welcome() function inside hello function."
+
+    print(greet())
+    print(welcome())
+    
+    print("hello() function execution completed.")
+
+hello()
+
+#############################################################################################################################
+If we try to access welcome() outside hello(), we get an error. Because, it's scope is inside hello() function.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+welcome()
+
+O/P:
+------
+Traceback (most recent call last):
+  File "C:\Users\saakh\Learning\LearnPython\PythonBasics\10_Decorators\Decorators_2.py", line 17, in <module>
+    welcome()
+    ^^^^^^^
+NameError: name 'welcome' is not defined
+
+#############################################################################################################################
+If we look at below logic, it returns a function based on input.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+import sys
+
+def hello():
+    print("This hello() function has been executed.")
+
+    def greet():
+        return "\t This is greet() function inside hello function."
+
+    def welcome():
+        return "\t This is welcome() function inside hello function."
+
+    print("I'm going to return a function()!!!")
+
+    # print(sys.argv[1])
+    if len(sys.argv) > 1 and  sys.argv[1] == 'Sandy':
+        return greet
+    else:
+        return welcome
+
+func = hello()
+print(func())
+
+--Command python ./filename.py Sandy
+#############################################################################################################################
+
+Let us look at one more small example:
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+def cool():
+
+    def super_cool():
+        print("I'm very cool")
+
+    return super_cool
+
+some_fun_def = cool()
+
+print(some_fun_def)
+
+print(some_fun_def())
+
+#############################################################################################################################
+
+To understand sending and receiving functions as args REFER Func_Send_Receive_Inside_As_Arg.py
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+def hello():
+    return 'Sandy'
+
+def other_function(other_fp):
+    print("Other code runs here")
+    print(other_fp())
+
+other_function(hello)
+#############################################################################################################################
+
+Now trying to send and receive function as an argument to explain decorator functionality.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+    def new_decorator(original_function):
+        def wrap_func():
+            print('Some extra code, before the original function.')
+            original_function()
+            print('Some extra code, after the original function.')
+
+        return wrap_func
+
+    def needs_decorator():
+        print("I need to be decorated")
+
+    decorated_function = new_decorator(needs_decorator)
+
+    decorated_function()
+#############################################################################################################################
+To perform above action like a switch we can use a different syntax:
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+    # wrapper function around original_function
+
+    def new_decorator(original_function):
+        def wrap_func():
+            print('Some extra code, before the original function.')
+            original_function()
+            print('Some extra code, after the original function.')
+
+        return wrap_func
+
+    @new_decorator
+    def needs_decorator():
+        print("I need to be decorated")
+
+    needs_decorator()
+
+#############################################################################################################################
+
+@new_decorator acts like a switch.
+On and Off will toggle between functionalities.
+
+
+
