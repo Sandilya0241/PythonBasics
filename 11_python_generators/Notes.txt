@@ -1,0 +1,200 @@
+Generator functions allows us to write a function that can send back a value and then later resume to pick up where it left off
+
+This type of function is a generator in Python, allowing us to generate a sequence of values over time.
+
+The main difference in the syntax will be the use of the `yield` statement.
+
+When a Generator function is compiled they become an object that supports an iteration protocol.
+
+That means when they are called in your code they don't actually return a value and then exit. Instead `Generator` functions will automatically suspend and resume their execution and state around the last point of value generation. The advantage is that instead of having to compute an entire series of values up front, the Generator computes one value waits until the next value is called for.
+
+For example, the range() function doesn't produce a list in memory for all the values from start to stop. Instead it just keeps track of the last number and the step size, to provide a flow of numbers.
+
+If a user did need the list, they have to transform the Generator to a list with list(range(0,10))
+
+*****************************REFER Generators_1.Py*************************************************
+
+Let us create a normal function first. 
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+    def create_cubes(num_limit):
+        result = []
+        for num in range(num_limit):
+            result.append(num**3)
+        return result
+
+    print(create_cubes(10))
+
+o/p:
+    0
+    1
+    8
+    27
+    64
+    125
+    216
+    343
+    512
+    729
+
+#############################################################################################################################
+What if the range is (10000), create_cubes storing large list of numbers in the memory. But, if we use yeild keyword, it doesn't store list in memory instead it yeilds the vaules as they come.
+
+Let us print create_cubes(10)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+    print(create_cubes(10))
+
+o/p:
+    [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+
+#############################################################################################################################
+
+Let us create new Generator:
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE
+-----------------------------
+
+    def create_cubes_new(num_limit):
+        for num in range(num_limit):
+            yield num ** 3
+
+    print(create_cubes_new(10))
+
+o/p:
+    <generator object create_cubes_new at 0x000001C4EC073850>
+
+
+#############################################################################################################################
+Let us see one more example for fibonacci number program (with Generator and without):
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE (with Generator)
+-----------------------------
+
+    def fibonacci_cust(num_limit):
+        a=1
+        b=1
+        for num in range(num_limit):
+            yield a
+            a,b = b,a+b
+
+    for num in fibonacci_cust(10):
+        print(num)
+
+o/p:
+    1
+    1
+    2
+    3
+    5
+    8
+    13
+    21
+    34
+    55
+
+
+
+
+CODE (without Generator)
+-----------------------------
+
+    def fibonacci_cust(num_limit):
+        a=1
+        b=1
+        output = []
+        for num in range(num_limit):
+            output.append(a)
+            a,b = b,a+b
+        return output
+
+    for num in fibonacci_cust(10):
+        print(num)
+
+o/p:
+    1
+    1
+    2
+    3
+    5
+    8
+    13
+    21
+    34
+    55
+
+
+#############################################################################################################################
+
+Next function:
+next() function will fetch next values from Generator.
+If all the values are yielded, StopIteration error will occur.
+In for loop, for loop catches this error and end the loop.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE (with Generator)
+-----------------------------
+
+
+for num in fibonacci_cust(10):
+    print(num)
+
+def simple_gen():
+    for number in range(3):
+        yield number
+
+for number in simple_gen():
+    print(number)
+
+g = simple_gen()
+
+print(next(g))
+print(next(g))
+print(next(g))
+print(next(g))
+
+
+O/p:
+0
+1
+2
+Traceback (most recent call last):
+  File "C:\Users\saakh\Learning\LearnPython\PythonBasics\11_python_generators\Generators_1.py", line 41, in <module>
+    print(next(g))
+          ^^^^^^^
+StopIteration
+
+#############################################################################################################################
+
+iter() function:
+
+This will convert objects into iterable objects. We cannot directly call, next() on str object. But we can convert it into iter and then call next() on it.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+CODE 
+-----------------------------
+
+
+s = "Hello"
+next(s)
+
+
+O/p:
+Traceback (most recent call last):
+  File "C:\Users\saakh\Learning\LearnPython\PythonBasics\11_python_generators\Generators_1.py", line 47, in <module>
+    next(s)
+TypeError: 'str' object is not an iterator
+
+
+s_iter = iter(s)
+next(s_iter)
+
+#############################################################################################################################
